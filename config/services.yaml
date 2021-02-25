@@ -29,3 +29,34 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Controller\DefaultController:
+        public: true
+        arguments:
+            $shopifyApiKey: '%env(SHOPIFY_API_KEY)%'
+
+    App\Storage\KeyValueStore:
+        arguments:
+            $appPrefix: '%env(REDIS_APP_PREFIX)%'
+
+    App\Shopify\OAuthService:
+        arguments:
+            $shopifyApiKey: '%env(SHOPIFY_API_KEY)%'
+            $shopifyApiSecret: '%env(SHOPIFY_API_SECRET)%'
+
+    App\Helpers\HttpClientFactory:
+        arguments:
+            $shopifyApiVersion: '%env(SHOPIFY_API_VERSION)%'
+
+    App\Helpers\RequestValidator:
+        arguments:
+            $shopifyApiSecret: '%env(SHOPIFY_API_SECRET)%'
+
+    Predis\Client:
+        arguments:
+            $parameters: '%env(REDIS_URL)%'
+
+    App\Helpers\JwtHelper:
+        arguments:
+            $shopifyApiKey: '%env(SHOPIFY_API_KEY)%'
+            $shopifyApiSecret: '%env(SHOPIFY_API_SECRET)%'

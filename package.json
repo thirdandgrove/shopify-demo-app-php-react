@@ -17,8 +17,16 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@apollo/client": "^3.3.11",
+        "@shopify/app-bridge": "^1.29.0",
+        "@shopify/app-bridge-react": "^1.29.0",
+        "@shopify/app-bridge-utils": "^1.29.0",
+        "@shopify/polaris": "^6.0.1",
+        "big.js": "^6.0.3",
+        "graphql": "^15.5.0",
         "prop-types": "^15.7.2",
         "react": "^17.0.1",
-        "react-dom": "^17.0.1"
+        "react-dom": "^17.0.1",
+        "react-router-dom": "^5.2.0"
     }
 }
