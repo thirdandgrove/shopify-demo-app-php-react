@@ -15,13 +15,11 @@ const appElement = document.getElementById('app');
 const appSettings = JSON.parse(appElement.dataset.appSettings);
 
 const AppWithApolloProvider = () => {
-    const app = useAppBridge();
-
     // Use authenticatedFetch to add authorization header with JWT.
     const link = createHttpLink({
         // Add &XDEBUG_SESSION_START=PHPSTORM to debug proxy with PHPSTORM and xdebug.
         uri: `/graphql?shop=${appSettings.shopOrigin}`,
-        fetch: authenticatedFetch(app)
+        fetch: authenticatedFetch(useAppBridge())
     });
 
     const client = new ApolloClient({
