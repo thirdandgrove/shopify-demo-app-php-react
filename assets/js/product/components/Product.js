@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Card, Stack, Button, TextStyle} from '@shopify/polaris';
+import {Card, Stack, Button, TextStyle, DataTable} from '@shopify/polaris';
 import ProductContext from '../contexts/productContext';
 import Variant from './Variant';
 import * as stateHelper from '../helper/stateHelper';
@@ -10,27 +10,36 @@ const Product = () => {
 
     const handleSaveChanges = () => {
         dispatch({
-           type: 'SAVE_PRODUCT'
+            type: 'SAVE_PRODUCT'
         });
     };
+
+    const rows = Array.from(product.variants.values()).map(variant => ([
+        variant.displayName,
+        variant.sku,
+        variant.price.toFixed(2),
+        <Variant id={variant.id}/>
+    ]));
 
     return (
         <Card>
             <Card.Section>
-                <Stack alignment="center" distribution="fillEvenly">
-                    <TextStyle variation="strong">SKU</TextStyle>
-                    <TextStyle variation="strong">Name</TextStyle>
-                    <TextStyle variation="strong">Original Price</TextStyle>
-                    <TextStyle variation="strong">New Price</TextStyle>
-                </Stack>
+                <DataTable
+                    columnContentTypes={[
+                        'text',
+                        'text',
+                        'numeric',
+                        'text',
+                    ]}
+                    headings={[
+                        'SKU',
+                        'Name',
+                        'Original Price',
+                        'New Price'
+                    ]}
+                    rows={rows}
+                />
             </Card.Section>
-
-            { Array.from(product.variants.values()).map(variant => (
-                <Card.Section key={variant.id}>
-                    <Variant id={variant.id} />
-                </Card.Section>
-            ))}
-
             <Card.Section>
                 <Stack distribution="trailing">
                     <Button
