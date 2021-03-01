@@ -12,6 +12,7 @@ You must have a [Shopify Partner](https://www.shopify.com/partners) account and 
 * Copy .env to .env.local
 * Run `composer install`
 * Run `yarn install`
+* Run `yarn encore dev`
 * Configure your web server to point to the `public` directory. 
 * Access the application with a browser. If all is well, it should return a blank page except for the words "Bad request". This is because it is not a signed request from Shopify.
 * Shopify requires requests to be https. If you use a self signed certificate, make sure you go through the "this is unsafe" step on your browser before attempting the next steps. Remember this too while testing if you clear your browser cache or the app suddenly stops working. It's not always obvious what's happening in the iframe.
@@ -31,6 +32,7 @@ Alternatively, use a service such as [ngrok](https://ngrok.com). This will provi
 * Go to `Products` and click on a product.
 * The `More Actions` menu should contain a link to the app. Click that to go to the app. You should be able to edit prices, save and return to the product detail page.
 
+For active development, run `yarn encore dev --watch` to watch for changes and automatically recompile.  
 ## Uninstall
 For now, if you uninstall the app from the store, you'll need to delete the key from Redis if you want to reinstall it. From the Linux command line: 
 * `redis-cli`
