@@ -4,14 +4,17 @@ import ProductContext from '../contexts/productContext';
 import Big from 'big.js';
 
 const Variant = props => {
-    const {state, dispatch, product} = useContext(ProductContext);
+    const {state, dispatch} = useContext(ProductContext);
     const stateVariant = state.variants.get(props.id);
     // Use state for the value so that keystrokes are immediately displayed while refreshing only this component.
     const [value, setValue] = useState(stateVariant.price.toFixed(2));
 
     const handleOnBlur = e => {
-        const stringValue = !isNaN(e.target.value) ? e.target.value : '0.00';
-        const value = new Big(stringValue);
+        if (isNaN(e.target.value)) {
+            return;
+        }
+
+        const value = new Big(e.target.value);
 
         dispatch({
             type: 'SET_PRICE',
@@ -24,11 +27,14 @@ const Variant = props => {
 
     return (
         <TextField
-            label="Price" labelHidden={true}
+            label="Price"
+            labelHidden={true}
+            type="text"
             align="right"
             value={value}
             onChange={setValue}
             onBlur={handleOnBlur}
+            error={isNaN(value) ? 'Not a valid number' : ''}
         />
     );
 };
