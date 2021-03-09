@@ -2,12 +2,11 @@
 
 namespace App\Shopify;
 
+use App\Helpers\ConfigHelper;
 use App\Helpers\HttpClientFactory;
-use App\Helpers\LogHelper;
 use App\Helpers\RequestValidator;
 use App\Storage\KeyValueStore;
 use GuzzleHttp\RequestOptions;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use GuzzleHttp\Exception\RequestException;
@@ -66,6 +65,13 @@ class OAuthService
     private $httpClientFactory;
 
     /**
+     * Config helper.
+     *
+     * @var \App\Helpers\ConfigHelper
+     */
+    private $configHelper;
+
+    /**
      * OAuthService constructor.
      *
      * @param string $shopifyApiKey
@@ -80,6 +86,8 @@ class OAuthService
      *   Request validator.
      * @param \App\Helpers\HttpClientFactory $httpClientFactory
      *   Http client factory.
+     * @param \App\Helpers\ConfigHelper $configHelper
+     *   Config helper.
      */
     public function __construct(
         string $shopifyApiKey,
@@ -87,7 +95,8 @@ class OAuthService
         UrlGeneratorInterface $urlGenerator,
         KeyValueStore $keyValueStore,
         RequestValidator $requestValidator,
-        HttpClientFactory $httpClientFactory
+        HttpClientFactory $httpClientFactory,
+        ConfigHelper $configHelper
     ) {
         $this->shopifyApiKey = $shopifyApiKey;
         $this->shopifyApiSecret = $shopifyApiSecret;
@@ -95,6 +104,7 @@ class OAuthService
         $this->keyValueStore = $keyValueStore;
         $this->requestValidator = $requestValidator;
         $this->httpClientFactory = $httpClientFactory;
+        $this->configHelper = $configHelper;
     }
 
     /**
@@ -110,7 +120,7 @@ class OAuthService
      */
     public function generateAuthorizeUrl(string $shop)
     {
-        $oauthRedirectUrl = $this->urlGenerator->generate('shopify_oauth_callback', [], UrlGeneratorInterface::ABSOLUTE_URL);
+        $oauthRedirectUrl = $this->configHelper->getBaseUrl() . $this->urlGenerator->generate('shopify_oauth_callback');
 
         // Generate URL safe nonce.
         $nonce = bin2hex(random_bytes(32));
@@ -147,6 +157,7 @@ class OAuthService
             return false;
         }
 
+        // The nonce is not needed again.
         $this->keyValueStore->delete($shop, self::NONCE_KEY);
 
         return true;
@@ -175,7 +186,6 @@ class OAuthService
 
         }
         catch (RequestException $exception) {
-            $this->logHelper->logRequestException($exception, 'Error requesting access token', $this->loggerChannel);
             throw $exception;
         }
 

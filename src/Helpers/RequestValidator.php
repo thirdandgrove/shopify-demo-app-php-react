@@ -41,7 +41,7 @@ class RequestValidator
         unset($queryVars['hmac']);
 
         // Build message like a query string. We could probably use
-        // http_build_query here but the string must be sorted the key.
+        // http_build_query here but the string must be sorted by the key.
         $message = [];
         foreach ($queryVars as $key => $value) {
             $message[] = "$key=$value";

@@ -3,7 +3,6 @@
 
 namespace App\Controller;
 
-use App\Helpers\AnalyticsService;
 use App\Helpers\HttpClientFactory;
 use App\Helpers\JwtHelper;
 use App\Shopify\ShopifyAdminApi;

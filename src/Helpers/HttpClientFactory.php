@@ -6,7 +6,6 @@ use App\Shopify\OAuthService;
 use App\Storage\KeyValueStore;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use Psr\Log\LoggerInterface;
 
 /**
  * Create configured http clients.
